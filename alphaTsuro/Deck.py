@@ -1,5 +1,6 @@
 import json
 from Tile import Tile
+from random import shuffle
 
 class Deck:
 	"""Stores the tiles in the deck."""
@@ -22,3 +23,12 @@ class Deck:
 			if (tile != None):
 				deck.tiles.append(tile)
 		return deck
+
+	def shuffle(self):
+		shuffle(self.tiles)
+
+	def draw(self):
+		return self.tiles.pop()
+
+	def add_tile(self, tile):
+		self.tile.append(tile)

@@ -5,13 +5,23 @@ from alphaTsuro.Board import Board
 from alphaTsuro.Piece import Piece
 
 
-class TestDeckLoading(unittest.TestCase):
+class TestDeck(unittest.TestCase):
 	def setUp(self):
 		self.filename = "data/testDeck.json"
+		self.test_deck = Deck()
+		self.test_deck.tiles = [1,2,3,4,5]
 
 	def test_deck_loading(self):
 		testDeck = Deck.from_json(self.filename)
 		self.assertEqual(len(testDeck.tiles), 2)
+
+	def test_shuffle(self):
+		shuffled = False
+		for i in range(10):
+			self.test_deck.shuffle()
+			shuffled = shuffled or self.test_deck.tiles != [1,2,3,4,5]
+			self.assertEqual(sorted(self.test_deck.tiles), [1,2,3,4,5])
+		self.assertTrue(shuffled)
 
 class TestPieceMovement(unittest.TestCase):
 	def setUp(self):
