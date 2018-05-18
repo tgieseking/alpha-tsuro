@@ -22,7 +22,3 @@ class Deck:
 			if (tile != None):
 				deck.tiles.append(tile)
 		return deck
-
-
-testDeck = Deck.from_json("data/deckTiles.json")
-print [tile.connections for tile in testDeck.tiles]

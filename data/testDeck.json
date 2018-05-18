@@ -1,0 +1,7 @@
+[
+{"UL":"DR","UR":"RD","RU":"DL","RD":"UR","DR":"UL","DL":"RU","LD":"LU","LU":"LD"},
+{"UL":"UR","UR":"UL","RU":"DR","RD":"LD","DR":"RU","DL":"LU","LD":"RD","LU":"DL"},
+{"UL":" ","UR":" ","RU":" ","RD":" ","DR":" ","DL":" ","LD":" ","LU":" "},
+{"UL":"DR","UR":"RD","RU":"DL","RD":"UR","DR":"UL","DL":"RU","LD":"LU","other":"LD"},
+{"UL":"UR","UR":"RU","RU":"DR","RD":"LD","DR":"UL","DL":"LU","LD":"RD","LU":"DL"}
+]

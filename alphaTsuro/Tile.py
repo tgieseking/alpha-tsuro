@@ -33,5 +33,8 @@ class Tile:
 				return None
 		except AttributeError:
 			return None
+		for key in connections_dict.keys():
+			if connections_dict[key] == key or connections_dict[connections_dict[key]] != key:
+				return None
 		tile.connections = connections_dict
 		return tile
