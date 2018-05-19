@@ -38,3 +38,17 @@ class Tile:
 				return None
 		tile.connections = connections_dict
 		return tile
+
+
+	def rotate_clockwise(self, turns=1):
+		turns = turns % 4
+		if turns == 1:
+			clockwise = {"UL":"RU", "UR":"RD", "RU":"DR", "RD":"DL",
+						 "DR":"LD", "DL":"LU", "LD":"UL", "LU":"UR"}
+			new_connections = {}
+			for point in self.connections:
+				new_connections[clockwise[point]] = clockwise[self.connections[point]]
+			self.connections = new_connections
+		else:
+			for i in range(turns):
+				self.rotate_clockwise()

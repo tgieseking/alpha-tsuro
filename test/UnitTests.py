@@ -27,7 +27,7 @@ class TestPieceMovement(unittest.TestCase):
 	def setUp(self):
 		self.board = Board()
 		self.tile1 = Tile()
-		self.tile1.connections = {"UL":"LU", "UR":"RD", "RU":"DL", "RD":"UL",
+		self.tile1.connections = {"UL":"LU", "UR":"RD", "RU":"DL", "RD":"UR",
 								  "DR":"LD", "DL":"RU", "LD":"DR", "LU":"UL"}
 		self.tile2 = Tile()
 		self.tile2.connections = {"UL":"DR", "UR":"DL", "RU":"RD", "RD":"RU",
@@ -60,3 +60,19 @@ class TestPieceMovement(unittest.TestCase):
 		self.assertFalse(self.piece.on_board())
 		(self.piece.row, self.piece.col) = (8,7)
 		self.assertFalse(self.piece.on_board())
+
+class TestTile(unittest.TestCase):
+	def setUp(self):
+		self.tile1 = Tile()
+		self.tile1.connections = {"UL":"LU", "UR":"RD", "RU":"DL", "RD":"UR",
+								  "DR":"LD", "DL":"RU", "LD":"DR", "LU":"UL"}
+
+	def test_single_rotation(self):
+		self.tile1.rotate_clockwise()
+		self.assertEqual(self.tile1.connections, {"UL":"LD", "UR":"RU", "RU":"UR", "RD":"DL",
+								 			 "DR":"LU", "DL":"RD", "LD":"UL", "LU":"DR"})
+
+	def test_multiple_rotation(self):
+		self.tile1.rotate_clockwise(7)
+		self.assertEqual(self.tile1.connections, {"UL":"RD", "UR":"LU", "RU":"DR", "RD":"UL",
+								 			 "DR":"RU", "DL":"LD", "LD":"DL", "LU":"UR"})
