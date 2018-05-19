@@ -1,2 +1,2 @@
 class IPlayer:
-	None
+    None
