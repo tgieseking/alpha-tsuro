@@ -1,14 +1,16 @@
 import pygame
 from Board import Board
 from Deck import Deck
+from Tile import Tile
 WHITE = (255, 255, 255)
 
 class Game:
     def __init__(self):
         self.board = Board()
-        self.deck = Deck()
+        self.deck = Deck.from_json("data/testDeck.json")
         self.initialize_screen()
         self.board.draw(self.screen)
+        self.deck.draw().draw(self.screen, 40, 40)
         pygame.display.flip()
         self.game_loop()
 
