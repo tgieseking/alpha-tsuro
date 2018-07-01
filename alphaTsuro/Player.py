@@ -2,9 +2,9 @@ from Piece import Piece
 from Board import Board
 
 class Player:
-    def __init__(self, board, deck):
+    def __init__(self, board, deck, piece_row, piece_col, piece_position):
         self.board = board
-        self.piece = Piece(board, 0, 0, "UL")
+        self.piece = Piece(board, piece_row, piece_col, piece_position)
         self.hand_size = 3
         self.hand = [deck.draw() for i in range(self.hand_size)]
 
