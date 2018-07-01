@@ -1,3 +1,3 @@
-from alphaTsuro.Game import Game
+from alphaTsuro.GameController import GameController
 
-game = Game()
+game = GameController()
