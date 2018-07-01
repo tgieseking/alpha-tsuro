@@ -35,7 +35,7 @@ class GameRenderer:
         self.screen.fill(self.BACKGROUND_COLOR)
         self.render_board(game_state.board)
         self.render_pieces([player.piece for player in game_state.players])
-        self.render_player_hands(game_state)
+        self.render_player_hands(game_state.players)
         pygame.display.flip()
 
     def render_tile(self, tile, x, y):
@@ -59,8 +59,8 @@ class GameRenderer:
                 y = self.BOARD_TOP_MARGIN + j * self.TILE_SIZE
                 pygame.draw.rect(self.screen, self.BOARD_LINE_COLOR, [x, y, self.TILE_SIZE, self.TILE_SIZE], self.BOARD_LINE_WIDTH)
 
-    def render_player_hands(self, game_state):
-        for i, player in enumerate(game_state.players):
+    def render_player_hands(self, players):
+        for i, player in enumerate(players):
             self.render_player_hand(player, self.board_height + i * self.player_hand_height)
 
     def render_player_hand(self, player, y):
