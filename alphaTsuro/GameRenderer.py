@@ -9,7 +9,7 @@ class GameRenderer:
         self.TILE_BORDER_WIDTH = 2
         self.TILE_BORDER_COLOR = (0, 0, 0)
         self.TILE_PATH_WIDTH = 2
-        self.TILE_PATH_COLOR = (200, 0, 0)
+        self.TILE_PATH_COLOR = (0, 255, 0)
 
         self.BOARD_TOP_MARGIN = 40
         self.BOARD_BOTTOM_MARGIN = 40
@@ -19,6 +19,9 @@ class GameRenderer:
 
         self.HAND_VERTICAL_MARGIN = 10
         self.HAND_HORIZONTAL_MARGIN = 40
+
+        self.PIECE_RADIUS = 5
+        self.PIECE_COLORS = [(255, 0, 0), (0, 0, 255)]
 
     def initialize_screen(self, game_state):
         pygame.init()
@@ -31,6 +34,7 @@ class GameRenderer:
     def render_game_state(self, game_state):
         self.screen.fill(self.BACKGROUND_COLOR)
         self.render_board(game_state.board)
+        self.render_pieces([player.piece for player in game_state.players])
         self.render_player_hands(game_state)
         pygame.display.flip()
 
@@ -65,3 +69,20 @@ class GameRenderer:
             tile_x = (self.screen_width - total_hand_width) // 2 + i * (2 * self.HAND_HORIZONTAL_MARGIN + self.TILE_SIZE) + self.HAND_HORIZONTAL_MARGIN
             tile_y = y + self.HAND_VERTICAL_MARGIN
             self.render_tile(tile, tile_x, tile_y)
+
+    def render_pieces(self, pieces):
+        for i, piece in enumerate(pieces):
+            self.render_piece(piece, i)
+
+    def render_piece(self, piece, piece_index):
+        point_offsets = {"UL":[self.TILE_MARK_DIST, 0],
+                         "UR":[self.TILE_SIZE - self.TILE_MARK_DIST, 0],
+                         "RU":[self.TILE_SIZE - 1, self.TILE_MARK_DIST],
+                         "RD":[self.TILE_SIZE - 1, self.TILE_SIZE - self.TILE_MARK_DIST],
+                         "DR":[self.TILE_SIZE - self.TILE_MARK_DIST, self.TILE_SIZE - 1],
+                         "DL":[self.TILE_MARK_DIST, self.TILE_SIZE - 1],
+                         "LD":[0, self.TILE_SIZE - self.TILE_MARK_DIST],
+                         "LU":[0, self.TILE_MARK_DIST]}
+        x = self.BOARD_SIDE_MARGIN + piece.col * self.TILE_SIZE + point_offsets[piece.edge_position][0]
+        y = self.BOARD_TOP_MARGIN + piece.row * self.TILE_SIZE + point_offsets[piece.edge_position][1]
+        pygame.draw.circle(self.screen, self.PIECE_COLORS[piece_index], [x, y], self.PIECE_RADIUS)
