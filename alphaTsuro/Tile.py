@@ -54,10 +54,3 @@ class Tile:
         else:
             for i in range(turns):
                 self.rotate_clockwise()
-
-    def draw(self, screen, x, y):
-        RED = (150, 0, 0)
-        point_coords = {"UL":[x + 10, y], "UR":[x + 30, y], "RU":[x + 40, y + 10], "RD":[x + 40, y + 30],
-                         "DR":[x + 30, y + 40], "DL":[x + 10, y + 40], "LD":[x, y + 30], "LU":[x, y + 10]}
-        for point in self.connections:
-            pygame.draw.line(screen, RED, point_coords[point], point_coords[self.connections[point]], 2)

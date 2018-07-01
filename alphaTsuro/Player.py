@@ -5,7 +5,8 @@ class Player:
     def __init__(self, board, deck):
         self.board = board
         self.piece = Piece(board, 0, 0, "UL")
-        self.hand = [deck.draw() for i in range(3)]
+        self.hand_size = 3
+        self.hand = [deck.draw() for i in range(self.hand_size)]
 
     def take_turn(self):
         selected_piece, index = self.select_piece()
@@ -14,4 +15,4 @@ class Player:
 
 
     def select_piece(self):
-        return 
+        return
