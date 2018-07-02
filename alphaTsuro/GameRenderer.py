@@ -18,7 +18,7 @@ class GameRenderer:
         self.BOARD_LINE_COLOR = (0, 0, 0)
 
         self.HAND_VERTICAL_MARGIN = 10
-        self.HAND_HORIZONTAL_MARGIN = 40
+        self.HAND_HORIZONTAL_MARGIN = 20
 
         self.PIECE_RADIUS = 5
         self.PIECE_COLORS = [(255, 0, 0), (0, 0, 255)]
