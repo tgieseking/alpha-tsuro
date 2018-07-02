@@ -70,6 +70,11 @@ class PlayerTurnState:
             if event.key == pygame.K_DOWN:
                 self.player.hand[self.selected_tile].rotate_clockwise(-1)
                 return True
+            if event.key == pygame.K_RETURN:
+                self.player.select_tile(self.selected_tile)
+                next_player_index = (self.player_index + 1) % len(game_state.players)
+                game_controller.set_state(PlayerTurnState(game_state.players[next_player_index], next_player_index))
+                return True
         return False
 
     def get_ui_state(self):
