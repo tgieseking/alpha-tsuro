@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<body>
+<div style="width:470px; max-width:470px; display:inline-block">
+  <div style="display:flex; flex-direction:column">
+    <div style="display:flex; flex-direction:row; justify-content: space-around">
+      <button onclick="nextNode('UL')">UL</button>
+      <button onclick="nextNode('UR')">UR</button>
+    </div>
+    <div style="display:flex; flex-direction:row">
+      <div style="display:flex; flex-direction:column; justify-content: space-around">
+        <button onclick="nextNode('LU')">LU</button>
+        <button onclick="nextNode('LD')">LD</button>
+      </div>
+      <canvas id="myCanvas" width="400" height="400" style="border:1px solid #000000;"></canvas>
+      <div style="display:flex; flex-direction:column; justify-content: space-around">
+        <button onclick="nextNode('RU')">RU</button>
+        <button onclick="nextNode('RD')">RD</button>
+      </div>
+    </div>
+    <div style="display:flex; flex-direction:row; justify-content: space-around">
+      <button onclick="nextNode('DL')">DL</button>
+      <button onclick="nextNode('DR')">DR</button>
+    </div>
+    <div style="display:flex; flex-direction:row">
+      <button onclick="reset()">Reset</button>
+      <button onclick="push()">Push</button>
+      <button onclick="print()">Print</button>
+    </div>
+  </div>
+</div>
+</body>
+</html>
+
+<script>
+var canvas = document.getElementById("myCanvas");
+var context = canvas.getContext("2d");
+
+var pointCoords = {
+  "UL": [100,0],
+  "UR": [300,0],
+  "RU": [400,100],
+  "RD": [400,300],
+  "DR": [300,400],
+  "DL": [100,400],
+  "LD": [0,300],
+  "LU": [0,100]
+}
+
+var firstNode = null
+var tiles = []
+var currentTile = {}
+
+function nextNode(node) {
+  if (firstNode == null) {
+    firstNode = node;
+  } else {
+    currentTile[firstNode] = node;
+    currentTile[node] = firstNode;
+    drawLine(firstNode, node);
+    firstNode = null;
+  }
+}
+
+function drawLine(start, finish) {
+  context.moveTo(pointCoords[start][0],pointCoords[start][1]);
+  context.lineTo(pointCoords[finish][0],pointCoords[finish][1]);
+  context.stroke();
+}
+
+function clearCanvas() {
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  context.beginPath();
+}
+
+function reset() {
+  currentTile = {};
+  clearCanvas();
+}
+
+function push() {
+  tiles.push(currentTile);
+  reset()
+}
+
+function print() {
+  console.log(JSON.stringify(tiles));
+}
+</script>
