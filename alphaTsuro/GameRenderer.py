@@ -20,6 +20,10 @@ class GameRenderer:
         self.HAND_VERTICAL_MARGIN = 10
         self.HAND_HORIZONTAL_MARGIN = 20
 
+        self.HAND_SELECTION_PADDING = 5
+        self.HAND_SELECTION_LINE_COLOR = (255, 135, 40)
+        self.HAND_SELECTION_LINE_WIDTH = 2
+
         self.PIECE_RADIUS = 5
         self.PIECE_COLORS = [(255, 0, 0), (0, 0, 255)]
 
@@ -31,11 +35,13 @@ class GameRenderer:
         self.screen_height = self.board_height + len(game_state.players) * self.player_hand_height
         self.screen = pygame.display.set_mode([self.screen_width, self.screen_height])
 
-    def render_game_state(self, game_state):
+    def render_game_state(self, game_state, ui_state = {}):
         self.screen.fill(self.BACKGROUND_COLOR)
         self.render_board(game_state.board)
         self.render_pieces([player.piece for player in game_state.players])
         self.render_player_hands(game_state.players)
+        if "hand_selection" in ui_state:
+            self.render_hand_selection(ui_state["hand_selection"])
         pygame.display.flip()
 
     def render_tile(self, tile, x, y):
@@ -86,3 +92,10 @@ class GameRenderer:
         x = self.BOARD_SIDE_MARGIN + piece.col * self.TILE_SIZE + point_offsets[piece.edge_position][0]
         y = self.BOARD_TOP_MARGIN + piece.row * self.TILE_SIZE + point_offsets[piece.edge_position][1]
         pygame.draw.circle(self.screen, self.PIECE_COLORS[piece_index], [x, y], self.PIECE_RADIUS)
+
+    def render_hand_selection(self, hand_selection):
+        hand_y = self.board_height + hand_selection["player_index"] * self.player_hand_height
+        y = hand_y + self.HAND_VERTICAL_MARGIN - self.HAND_SELECTION_PADDING
+        total_hand_width = len(hand_selection["player"].hand) * (self.TILE_SIZE + 2 * self.HAND_HORIZONTAL_MARGIN)
+        x = (self.screen_width - total_hand_width) // 2 + hand_selection["selected_tile"] * (2 * self.HAND_HORIZONTAL_MARGIN + self.TILE_SIZE) + self.HAND_HORIZONTAL_MARGIN - self.HAND_SELECTION_PADDING
+        pygame.draw.rect(self.screen, self.HAND_SELECTION_LINE_COLOR, [x, y, self.TILE_SIZE + 2 * self.HAND_SELECTION_PADDING, self.TILE_SIZE + 2 * self.HAND_SELECTION_PADDING], self.HAND_SELECTION_LINE_WIDTH)
