@@ -18,4 +18,4 @@ class Player:
         if self.deck.isEmpty():
             del self.hand[selected_tile_index]
         else:
-            self.hand[selected_tile_index] = deck.draw()
+            self.hand[selected_tile_index] = self.deck.draw()
