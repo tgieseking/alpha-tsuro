@@ -59,11 +59,15 @@ class GameRenderer:
             pygame.draw.line(self.screen, self.TILE_PATH_COLOR, point_coords[point], point_coords[tile.connections[point]], self.TILE_PATH_WIDTH)
 
     def render_board(self, board):
-        for i in range(board.board_size):
-            for j in range(board.board_size):
-                x = self.BOARD_SIDE_MARGIN + i * self.TILE_SIZE
-                y = self.BOARD_TOP_MARGIN + j * self.TILE_SIZE
-                pygame.draw.rect(self.screen, self.BOARD_LINE_COLOR, [x, y, self.TILE_SIZE, self.TILE_SIZE], self.BOARD_LINE_WIDTH)
+        for row in range(board.board_size):
+            for col in range(board.board_size):
+                x = self.BOARD_SIDE_MARGIN + col * self.TILE_SIZE
+                y = self.BOARD_TOP_MARGIN + row * self.TILE_SIZE
+                tile = board.tiles[row][col]
+                if tile == None:
+                    pygame.draw.rect(self.screen, self.BOARD_LINE_COLOR, [x, y, self.TILE_SIZE, self.TILE_SIZE], self.BOARD_LINE_WIDTH)
+                else:
+                    self.render_tile(tile, x, y)
 
     def render_player_hands(self, players):
         for i, player in enumerate(players):
