@@ -78,7 +78,11 @@ class PlayerTurnState:
                 win_state = game_state.check_win_state()
                 if win_state["win_state"] == "ongoing":
                     next_player_index = (self.player_index + 1) % len(game_state.players)
-                    game_controller.set_state(PlayerTurnState(game_state.players[next_player_index], next_player_index))
+                    next_player = game_state.players[next_player_index]
+                    if next_player.is_human():
+                        game_controller.set_state(PlayerTurnState(next_player, next_player_index))
+                    else:
+                        game_controller.set_state(AgentTurnState(next_player, next_player_index))
                 else:
                     game_controller.set_state(GameEndState(win_state))
                 return True
@@ -86,6 +90,28 @@ class PlayerTurnState:
 
     def get_ui_state(self):
         return {"hand_selection":{"player": self.player, "player_index":self.player_index, "selected_tile":self.selected_tile}}
+
+class AgentTurnState:
+    def __init__(self, player, player_index):
+        self.player = player
+        self.player_index = player_index
+
+    def initialize(self, game_state, game_controller):
+        self.player.take_turn()
+        game_state.update_pieces()
+        win_state = game_state.check_win_state()
+        if win_state["win_state"] == "ongoing":
+            next_player_index = (self.player_index + 1) % len(game_state.players)
+            next_player = game_state.players[next_player_index]
+            if next_player.is_human():
+                game_controller.set_state(PlayerTurnState(next_player, next_player_index))
+            else:
+                game_controller.set_state(AgentTurnState(next_player, next_player_index))
+        else:
+            game_controller.set_state(GameEndState(win_state))
+
+    def get_ui_state(self):
+        return {}
 
 class GameEndState:
     def __init__(self, win_state):

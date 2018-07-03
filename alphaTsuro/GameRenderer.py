@@ -39,14 +39,14 @@ class GameRenderer:
         self.screen_width = 2 * self.BOARD_SIDE_MARGIN + game_state.board.board_size * self.TILE_SIZE
         self.board_height = self.BOARD_TOP_MARGIN + game_state.board.board_size * self.TILE_SIZE + self.BOARD_BOTTOM_MARGIN
         self.player_hand_height = 2 * self.HAND_VERTICAL_MARGIN + self.TILE_SIZE
-        self.screen_height = self.board_height + len(game_state.players) * self.player_hand_height
+        self.screen_height = self.board_height + len(game_state.humans) * self.player_hand_height
         self.screen = pygame.display.set_mode([self.screen_width, self.screen_height])
 
     def render_game_state(self, game_state, ui_state = {}):
         self.screen.fill(self.BACKGROUND_COLOR)
         self.render_board(game_state.board)
         self.render_pieces([player.piece for player in game_state.players])
-        self.render_player_hands(game_state.players)
+        self.render_player_hands(game_state.humans)
         if "hand_selection" in ui_state:
             self.render_hand_selection(ui_state["hand_selection"])
         if "win_state" in ui_state:

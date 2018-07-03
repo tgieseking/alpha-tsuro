@@ -16,3 +16,6 @@ class Player:
             del self.hand[selected_tile_index]
         else:
             self.hand[selected_tile_index] = self.deck.draw()
+
+    def is_human(self):
+        return True

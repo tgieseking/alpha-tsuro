@@ -1,13 +1,15 @@
 from Board import Board
 from Deck import Deck
 from Player import Player
+from PlayerAgent import RandomAgent
 
 class GameState:
     def __init__(self):
         self.board = Board()
         self.deck = Deck.from_json("data/testDeck.json")
         self.deck.shuffle()
-        self.players = [Player(self.board, self.deck, 0, 2, "UR"), Player(self.board, self.deck, 5, 3, "DL")]
+        self.players = [Player(self.board, self.deck, 0, 2, "UR"), RandomAgent(self.board, self.deck, 5, 3, "DL")]
+        self.humans = [player for player in self.players if player.is_human()]
 
     def update_pieces(self):
         for player in self.players:
