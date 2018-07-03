@@ -10,7 +10,7 @@ class GameRenderer:
         self.TILE_BORDER_WIDTH = 2
         self.TILE_BORDER_COLOR = (0, 0, 0)
         self.TILE_PATH_WIDTH = 2
-        self.TILE_PATH_COLOR = (0, 255, 0)
+        self.TILE_PATH_COLOR = (127, 55, 0)
 
         self.BOARD_TOP_MARGIN = 40
         self.BOARD_BOTTOM_MARGIN = 40
@@ -123,7 +123,7 @@ class GameRenderer:
         y = hand_y + self.HAND_VERTICAL_MARGIN - self.HAND_SELECTION_PADDING
         total_hand_width = len(hand_selection["player"].hand) * (self.TILE_SIZE + 2 * self.HAND_HORIZONTAL_MARGIN)
         x = (self.screen_width - total_hand_width) // 2 + hand_selection["selected_tile"] * (2 * self.HAND_HORIZONTAL_MARGIN + self.TILE_SIZE) + self.HAND_HORIZONTAL_MARGIN - self.HAND_SELECTION_PADDING
-        pygame.draw.rect(self.screen, self.HAND_SELECTION_LINE_COLOR, [x, y, self.TILE_SIZE + 2 * self.HAND_SELECTION_PADDING, self.TILE_SIZE + 2 * self.HAND_SELECTION_PADDING], self.HAND_SELECTION_LINE_WIDTH)
+        pygame.draw.rect(self.screen, self.PIECE_COLORS[hand_selection["player_index"]], [x, y, self.TILE_SIZE + 2 * self.HAND_SELECTION_PADDING, self.TILE_SIZE + 2 * self.HAND_SELECTION_PADDING], self.HAND_SELECTION_LINE_WIDTH)
 
     def render_win_state(self, win_state):
         WIN_MESSAGE_FONT = pygame.font.SysFont('Arial', 20)
