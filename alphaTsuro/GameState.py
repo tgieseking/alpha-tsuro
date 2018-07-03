@@ -7,7 +7,7 @@ class GameState:
         self.board = Board()
         self.deck = Deck.from_json("data/testDeck.json")
         self.deck.shuffle()
-        self.players = [Player(self, self.board, self.deck, 0, 2, "UR"), Player(self, self.board, self.deck, 5, 3, "DL")]
+        self.players = [Player(self.board, self.deck, 0, 2, "UR"), Player(self.board, self.deck, 5, 3, "DL")]
 
     def update_pieces(self):
         for player in self.players:

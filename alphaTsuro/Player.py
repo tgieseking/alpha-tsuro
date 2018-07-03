@@ -2,8 +2,7 @@ from Piece import Piece
 from Board import Board
 
 class Player:
-    def __init__(self, game_state, board, deck, piece_row, piece_col, piece_position):
-        self.game_state = game_state
+    def __init__(self, board, deck, piece_row, piece_col, piece_position):
         self.board = board
         self.piece = Piece(board, piece_row, piece_col, piece_position)
         self.hand_size = 3
