@@ -42,11 +42,11 @@ class InitializeState:
         game_controller.game_renderer.initialize_screen(game_state)
         game_controller.set_state(PlayerTurnState(game_state.players[0], 0))
 
-    def handle_event(self, event, game_state, game_controller):
-        return False
-
-    def get_ui_state(self):
-        return {}
+class NewGameState:
+    def initialize(self, game_state, game_controller):
+        new_game =  GameState()
+        game_controller.game_state = new_game
+        game_controller.set_state(PlayerTurnState(new_game.players[0], 0))
 
 class PlayerTurnState:
     def __init__(self, player, player_index):
@@ -95,7 +95,8 @@ class GameEndState:
         return
 
     def handle_event(self, event, game_state, game_controller):
-        return False
+        if event.type == pygame.KEYDOWN:
+            game_controller.set_state(NewGameState())
 
     def get_ui_state(self):
         return {"win_state": self.win_state}
