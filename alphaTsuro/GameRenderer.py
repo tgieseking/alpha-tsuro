@@ -27,8 +27,14 @@ class GameRenderer:
         self.PIECE_RADIUS = 5
         self.PIECE_COLORS = [(255, 0, 0), (0, 0, 255)]
 
+        self.WIN_MESSAGE_COLOR = (0, 0, 0)
+        self.WIN_MESSAGE_TOP_MARGIN = 100
+        self.WIN_MESSAGE_PADDING = 5
+        self.WIN_MESSAGE_BACKGROUND_COLOR = (255, 255, 255)
+        self.WIN_MESSAGE_BORDER_COLOR = (0, 0, 0)
+        self.WIN_MESSAGE_BORDER_WIDTH = 2
+
     def initialize_screen(self, game_state):
-        pygame.init()
         self.screen_width = 2 * self.BOARD_SIDE_MARGIN + game_state.board.board_size * self.TILE_SIZE
         self.board_height = self.BOARD_TOP_MARGIN + game_state.board.board_size * self.TILE_SIZE + self.BOARD_BOTTOM_MARGIN
         self.player_hand_height = 2 * self.HAND_VERTICAL_MARGIN + self.TILE_SIZE
@@ -42,6 +48,8 @@ class GameRenderer:
         self.render_player_hands(game_state.players)
         if "hand_selection" in ui_state:
             self.render_hand_selection(ui_state["hand_selection"])
+        if "win_state" in ui_state:
+            self.render_win_state(ui_state["win_state"])
         pygame.display.flip()
 
     def render_tile(self, tile, x, y):
@@ -103,3 +111,15 @@ class GameRenderer:
         total_hand_width = len(hand_selection["player"].hand) * (self.TILE_SIZE + 2 * self.HAND_HORIZONTAL_MARGIN)
         x = (self.screen_width - total_hand_width) // 2 + hand_selection["selected_tile"] * (2 * self.HAND_HORIZONTAL_MARGIN + self.TILE_SIZE) + self.HAND_HORIZONTAL_MARGIN - self.HAND_SELECTION_PADDING
         pygame.draw.rect(self.screen, self.HAND_SELECTION_LINE_COLOR, [x, y, self.TILE_SIZE + 2 * self.HAND_SELECTION_PADDING, self.TILE_SIZE + 2 * self.HAND_SELECTION_PADDING], self.HAND_SELECTION_LINE_WIDTH)
+
+    def render_win_state(self, win_state):
+        WIN_MESSAGE_FONT = pygame.font.SysFont('Arial', 20)
+        if win_state["win_state"] == "win":
+            message = "The winner is " + win_state["winner"]
+        elif win_state["win_state"] == "tie":
+            message = "It's a draw"
+        text_surface = WIN_MESSAGE_FONT.render(message, False, self.WIN_MESSAGE_COLOR)
+        x = (self.screen_width - text_surface.get_width()) // 2
+        pygame.draw.rect(self.screen, self.WIN_MESSAGE_BACKGROUND_COLOR, [x - self.WIN_MESSAGE_PADDING, self.WIN_MESSAGE_TOP_MARGIN - self.WIN_MESSAGE_PADDING, text_surface.get_width() + 2 * self.WIN_MESSAGE_PADDING, text_surface.get_height() + 2 * self.WIN_MESSAGE_PADDING])
+        pygame.draw.rect(self.screen, self.WIN_MESSAGE_BORDER_COLOR, [x - self.WIN_MESSAGE_PADDING, self.WIN_MESSAGE_TOP_MARGIN - self.WIN_MESSAGE_PADDING, text_surface.get_width() + 2 * self.WIN_MESSAGE_PADDING, text_surface.get_height() + 2 * self.WIN_MESSAGE_PADDING], self.WIN_MESSAGE_BORDER_WIDTH)
+        self.screen.blit(text_surface, (x, self.WIN_MESSAGE_TOP_MARGIN))

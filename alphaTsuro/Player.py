@@ -13,8 +13,6 @@ class Player:
     def select_tile(self, selected_tile_index):
         selected_tile = self.hand[selected_tile_index]
         self.board.tiles[self.piece.row][self.piece.col] = selected_tile
-        for player in self.game_state.players:
-            player.piece.update_position()
         if self.deck.isEmpty():
             del self.hand[selected_tile_index]
         else:

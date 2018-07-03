@@ -37,6 +37,8 @@ class GameController:
 
 class InitializeState:
     def initialize(self, game_state, game_controller):
+        pygame.init()
+        pygame.font.init()
         game_controller.game_renderer.initialize_screen(game_state)
         game_controller.set_state(PlayerTurnState(game_state.players[0], 0))
 
@@ -72,10 +74,28 @@ class PlayerTurnState:
                 return True
             if event.key == pygame.K_RETURN:
                 self.player.select_tile(self.selected_tile)
-                next_player_index = (self.player_index + 1) % len(game_state.players)
-                game_controller.set_state(PlayerTurnState(game_state.players[next_player_index], next_player_index))
+                game_state.update_pieces()
+                win_state = game_state.check_win_state()
+                if win_state["win_state"] == "ongoing":
+                    next_player_index = (self.player_index + 1) % len(game_state.players)
+                    game_controller.set_state(PlayerTurnState(game_state.players[next_player_index], next_player_index))
+                else:
+                    game_controller.set_state(GameEndState(win_state))
                 return True
         return False
 
     def get_ui_state(self):
         return {"hand_selection":{"player": self.player, "player_index":self.player_index, "selected_tile":self.selected_tile}}
+
+class GameEndState:
+    def __init__(self, win_state):
+        self.win_state = win_state
+
+    def initialize(self, game_state, game_controller):
+        return
+
+    def handle_event(self, event, game_state, game_controller):
+        return False
+
+    def get_ui_state(self):
+        return {"win_state": self.win_state}
