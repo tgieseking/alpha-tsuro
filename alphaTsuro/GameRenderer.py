@@ -1,4 +1,5 @@
 import pygame
+import math
 
 class GameRenderer:
     def __init__(self):
@@ -64,7 +65,19 @@ class GameRenderer:
                         "LD":[x, y + self.TILE_SIZE - self.TILE_MARK_DIST],
                         "LU":[x, y + self.TILE_MARK_DIST]}
         for point in tile.connections:
-            pygame.draw.line(self.screen, self.TILE_PATH_COLOR, point_coords[point], point_coords[tile.connections[point]], self.TILE_PATH_WIDTH)
+            if point[0] == tile.connections[point][0]:
+                # the endpoints are on the same edges
+                width = self.TILE_SIZE - 2 * self.TILE_MARK_DIST
+                if point[0] == "U":
+                    pygame.draw.arc(self.screen, self.TILE_PATH_COLOR, [x + self.TILE_MARK_DIST, y - width // 2, width, width], math.radians(180), math.radians(360), self.TILE_PATH_WIDTH)
+                elif point[0] == "D":
+                    pygame.draw.arc(self.screen, self.TILE_PATH_COLOR, [x + self.TILE_MARK_DIST, y + self.TILE_SIZE - width // 2, width, width], math.radians(0), math.radians(180), self.TILE_PATH_WIDTH)
+                elif point[0] == "L":
+                    pygame.draw.arc(self.screen, self.TILE_PATH_COLOR, [x - width // 2, y + self.TILE_MARK_DIST, width, width], math.radians(270), math.radians(450), self.TILE_PATH_WIDTH)
+                elif point[0] == "R":
+                    pygame.draw.arc(self.screen, self.TILE_PATH_COLOR, [x + self.TILE_SIZE - width // 2, y + self.TILE_MARK_DIST, width, width], math.radians(90), math.radians(270), self.TILE_PATH_WIDTH)
+            else:
+                pygame.draw.line(self.screen, self.TILE_PATH_COLOR, point_coords[point], point_coords[tile.connections[point]], self.TILE_PATH_WIDTH)
 
     def render_board(self, board):
         for row in range(board.board_size):
