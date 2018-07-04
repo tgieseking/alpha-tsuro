@@ -128,7 +128,7 @@ class GameRenderer:
     def render_win_state(self, win_state):
         WIN_MESSAGE_FONT = pygame.font.SysFont('Arial', 20)
         if win_state["win_state"] == "win":
-            message = "The winner is " + win_state["winner"]
+            message = "The winner is player " + str(win_state["winner"] + 1)
         elif win_state["win_state"] == "tie":
             message = "It's a draw"
         text_surface = WIN_MESSAGE_FONT.render(message, False, self.WIN_MESSAGE_COLOR)

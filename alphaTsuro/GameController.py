@@ -40,13 +40,21 @@ class InitializeState:
         pygame.init()
         pygame.font.init()
         game_controller.game_renderer.initialize_screen(game_state)
-        game_controller.set_state(PlayerTurnState(game_state.players[0], 0))
+        first_player = game_state.players[0]
+        if first_player.is_human():
+            game_controller.set_state(PlayerTurnState(first_player, 0))
+        else:
+            game_controller.set_state(AgentTurnState(first_player, 0))
 
 class NewGameState:
     def initialize(self, game_state, game_controller):
         new_game =  GameState()
         game_controller.game_state = new_game
-        game_controller.set_state(PlayerTurnState(new_game.players[0], 0))
+        first_player = new_game.players[0]
+        if first_player.is_human():
+            game_controller.set_state(PlayerTurnState(first_player, 0))
+        else:
+            game_controller.set_state(AgentTurnState(first_player, 0))
 
 class PlayerTurnState:
     def __init__(self, player, player_index):
