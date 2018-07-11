@@ -1,14 +1,14 @@
 import pygame
 from GameRenderer import GameRenderer
 from GameState import GameState
-from Agents import HumanAgent
+import Agents
 import copy
 
 class GameController:
     def __init__(self):
         self.game_renderer = GameRenderer()
         self.game_state = GameState()
-        self.agents = [HumanAgent(), HumanAgent()]
+        self.agents = [Agents.HumanAgent(), Agents.AvoidDeathAgent()]
         self.set_state(InitializeState())
         self.game_loop()
 
@@ -108,7 +108,7 @@ class AgentTurnState:
 
     def initialize(self, game_state, game_controller):
         tile_index, num_rotations = self.agent.select_tile(game_state)
-        game_state.take_turn(tile_index, game_state)
+        game_state.take_turn(tile_index, num_rotations)
         win_state = game_state.check_win_state()
         if win_state["win_state"] == "ongoing":
             next_agent = game_controller.agents[game_state.current_player_index]

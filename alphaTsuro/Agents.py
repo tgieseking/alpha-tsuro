@@ -6,25 +6,31 @@ class HumanAgent:
     def is_human(self):
         return True
 
+class ComputerAgent:
+    def is_human(self):
+        return False
 
-class RandomAgent:
+class RandomAgent(ComputerAgent):
     def select_tile(self, game_state):
-        tile_index = random.randrange(0, len(self.hand))
+        hand_size = len(game_state.players[game_state.current_player_index].hand)
+        tile_index = random.randrange(0, hand_size)
         num_rotations = random.randrange(0, 4)
         return (tile_index, num_rotations)
 
-class AvoidDeathAgent:
-    def select_tile(self):
+class AvoidDeathAgent(ComputerAgent):
+    def select_tile(self, game_state):
+        player_index = game_state.current_player_index
+        hand_size = len(game_state.players[game_state.current_player_index].hand)
         wins = []
         ongoings = []
         ties = []
         losses = []
-        for tile_index in range(len(self.hand)):
+        for tile_index in range(hand_size):
             for num_rotations in range(4):
-                next_state = self.get_next_state(tile_index, num_rotations)
+                next_state = game_state.take_turn_copy(tile_index, num_rotations)
                 win_state = next_state.check_win_state()
                 if win_state["win_state"] == "win":
-                    if win_state["winner"] == self.index:
+                    if win_state["winner"] == player_index:
                         wins.append((tile_index, num_rotations))
                     else:
                         losses.append((tile_index, num_rotations))

@@ -2,6 +2,7 @@ from Board import Board
 from Deck import Deck
 from Player import Player
 from PlayerAgent import RandomAgent, AvoidDeathAgent
+import copy
 
 class GameState:
     def __init__(self):
@@ -13,7 +14,8 @@ class GameState:
 
     def take_turn_copy(self, selected_tile_index, num_rotations):
         new_state = copy.deepcopy(self)
-        return new_state.take_turn(selected_tile_index, num_rotations)
+        new_state.take_turn(selected_tile_index, num_rotations)
+        return new_state
 
     def take_turn(self, selected_tile_index, num_rotations):
         self.players[self.current_player_index].take_turn(selected_tile_index, num_rotations)
