@@ -10,13 +10,11 @@ class Player:
         self.deck = deck
         self.index = index
 
-    def select_tile(self, selected_tile_index):
+    def take_turn(self, selected_tile_index, num_rotations):
         selected_tile = self.hand[selected_tile_index]
+        selected_tile.rotate_clockwise(num_rotations)
         self.board.tiles[self.piece.row][self.piece.col] = selected_tile
         if self.deck.isEmpty():
             del self.hand[selected_tile_index]
         else:
             self.hand[selected_tile_index] = self.deck.draw()
-
-    def is_human(self):
-        return True

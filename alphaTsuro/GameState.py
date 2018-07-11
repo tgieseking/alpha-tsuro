@@ -8,8 +8,17 @@ class GameState:
         self.board = Board()
         self.deck = Deck.from_json("data/testDeck.json")
         self.deck.shuffle()
-        self.players = [Player(0, self.board, self.deck, 0, 2, "UR"), AvoidDeathAgent(1, self, 5, 3, "DL")]
-        self.humans = [player for player in self.players if player.is_human()]
+        self.players = [Player(0, self.board, self.deck, 0, 2, "UR"), Player(1, self.board, self.deck, 5, 3, "DL")]
+        self.current_player_index = 0
+
+    def take_turn_copy(self, selected_tile_index, num_rotations):
+        new_state = copy.deepcopy(self)
+        return new_state.take_turn(selected_tile_index, num_rotations)
+
+    def take_turn(self, selected_tile_index, num_rotations):
+        self.players[self.current_player_index].take_turn(selected_tile_index, num_rotations)
+        self.update_pieces();
+        self.current_player_index = (self.current_player_index + 1) % len(self.players)
 
     def update_pieces(self):
         for player in self.players:

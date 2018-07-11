@@ -1,11 +1,14 @@
 import pygame
 from GameRenderer import GameRenderer
 from GameState import GameState
+from Agents import HumanAgent
+import copy
 
 class GameController:
     def __init__(self):
         self.game_renderer = GameRenderer()
         self.game_state = GameState()
+        self.agents = [HumanAgent(), HumanAgent()]
         self.set_state(InitializeState())
         self.game_loop()
 
@@ -40,31 +43,31 @@ class InitializeState:
         pygame.init()
         pygame.font.init()
         game_controller.game_renderer.initialize_screen(game_state)
-        first_player = game_state.players[0]
-        if first_player.is_human():
-            game_controller.set_state(PlayerTurnState(first_player, 0))
+        first_agent = game_controller.agents[0]
+        if first_agent.is_human():
+            game_controller.set_state(HumanTurnState(first_agent))
         else:
-            game_controller.set_state(AgentTurnState(first_player, 0))
+            game_controller.set_state(AgentTurnState(first_agent))
 
 class NewGameState:
     def initialize(self, game_state, game_controller):
         new_game =  GameState()
         game_controller.game_state = new_game
-        first_player = new_game.players[0]
-        if first_player.is_human():
-            game_controller.set_state(PlayerTurnState(first_player, 0))
+        next_agent = game_controller.agents[0]
+        if next_agent.is_human():
+            game_controller.set_state(HumanTurnState(next_agent))
         else:
-            game_controller.set_state(AgentTurnState(first_player, 0))
+            game_controller.set_state(AgentTurnState(next_agent))
 
-class PlayerTurnState:
-    def __init__(self, player, player_index):
-        self.player = player
-        self.player_index = player_index
+class HumanTurnState:
+    def __init__(self, agent):
         self.selected_tile = 0
-        self.hand_size = len(player.hand)
 
     def initialize(self, game_state, game_controller):
-        return
+        self.player_index = game_state.current_player_index
+        self.hand = copy.deepcopy(game_state.players[self.player_index].hand)
+        self.hand_size = len(self.hand)
+        self.rotations = [0] * self.hand_size
 
     def handle_event(self, event, game_state, game_controller):
         if event.type == pygame.KEYDOWN:
@@ -75,46 +78,44 @@ class PlayerTurnState:
                 self.selected_tile = min(self.selected_tile + 1, self.hand_size - 1)
                 return True
             if event.key == pygame.K_UP:
-                self.player.hand[self.selected_tile].rotate_clockwise()
+                self.hand[self.selected_tile].rotate_clockwise()
+                self.rotations[self.selected_tile] = (self.rotations[self.selected_tile] + 1) % 4
                 return True
             if event.key == pygame.K_DOWN:
-                self.player.hand[self.selected_tile].rotate_clockwise(-1)
+                self.hand[self.selected_tile].rotate_clockwise(-1)
+                self.rotations[self.selected_tile] = (self.rotations[self.selected_tile] - 1) % 4
                 return True
             if event.key == pygame.K_RETURN:
-                self.player.select_tile(self.selected_tile)
-                game_state.update_pieces()
+                game_state.take_turn(self.selected_tile, self.rotations[self.selected_tile])
                 win_state = game_state.check_win_state()
                 if win_state["win_state"] == "ongoing":
-                    next_player_index = (self.player_index + 1) % len(game_state.players)
-                    next_player = game_state.players[next_player_index]
-                    if next_player.is_human():
-                        game_controller.set_state(PlayerTurnState(next_player, next_player_index))
+                    next_agent = game_controller.agents[game_state.current_player_index]
+                    if next_agent.is_human():
+                        game_controller.set_state(HumanTurnState(next_agent))
                     else:
-                        game_controller.set_state(AgentTurnState(next_player, next_player_index))
+                        game_controller.set_state(AgentTurnState(next_agent))
                 else:
                     game_controller.set_state(GameEndState(win_state))
                 return True
         return False
 
     def get_ui_state(self):
-        return {"hand_selection":{"player": self.player, "player_index":self.player_index, "selected_tile":self.selected_tile}}
+        return {"hand_selection":{"hand": self.hand, "player_index":self.player_index, "selected_tile":self.selected_tile}}
 
 class AgentTurnState:
-    def __init__(self, player, player_index):
-        self.player = player
-        self.player_index = player_index
+    def __init__(self, agent):
+        self.agent = agent
 
     def initialize(self, game_state, game_controller):
-        self.player.take_turn()
-        game_state.update_pieces()
+        tile_index, num_rotations = self.agent.select_tile(game_state)
+        game_state.take_turn(tile_index, game_state)
         win_state = game_state.check_win_state()
         if win_state["win_state"] == "ongoing":
-            next_player_index = (self.player_index + 1) % len(game_state.players)
-            next_player = game_state.players[next_player_index]
-            if next_player.is_human():
-                game_controller.set_state(PlayerTurnState(next_player, next_player_index))
+            next_agent = game_controller.agents[game_state.current_player_index]
+            if next_agent.is_human():
+                game_controller.set_state(HumanTurnState(next_agent))
             else:
-                game_controller.set_state(AgentTurnState(next_player, next_player_index))
+                game_controller.set_state(AgentTurnState(next_agent))
         else:
             game_controller.set_state(GameEndState(win_state))
 

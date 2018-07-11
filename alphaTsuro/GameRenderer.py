@@ -39,15 +39,15 @@ class GameRenderer:
         self.screen_width = 2 * self.BOARD_SIDE_MARGIN + game_state.board.board_size * self.TILE_SIZE
         self.board_height = self.BOARD_TOP_MARGIN + game_state.board.board_size * self.TILE_SIZE + self.BOARD_BOTTOM_MARGIN
         self.player_hand_height = 2 * self.HAND_VERTICAL_MARGIN + self.TILE_SIZE
-        self.screen_height = self.board_height + len(game_state.humans) * self.player_hand_height
+        self.screen_height = self.board_height + self.player_hand_height
         self.screen = pygame.display.set_mode([self.screen_width, self.screen_height])
 
     def render_game_state(self, game_state, ui_state = {}):
         self.screen.fill(self.BACKGROUND_COLOR)
         self.render_board(game_state.board)
         self.render_pieces([player.piece for player in game_state.players])
-        self.render_player_hands(game_state.humans)
         if "hand_selection" in ui_state:
+            self.render_hand(ui_state["hand_selection"]["hand"])
             self.render_hand_selection(ui_state["hand_selection"])
         if "win_state" in ui_state:
             self.render_win_state(ui_state["win_state"])
@@ -90,17 +90,6 @@ class GameRenderer:
                 else:
                     self.render_tile(tile, x, y)
 
-    def render_player_hands(self, players):
-        for i, player in enumerate(players):
-            self.render_player_hand(player, self.board_height + i * self.player_hand_height)
-
-    def render_player_hand(self, player, y):
-        total_hand_width = len(player.hand) * (self.TILE_SIZE + 2 * self.HAND_HORIZONTAL_MARGIN)
-        for i, tile in enumerate(player.hand):
-            tile_x = (self.screen_width - total_hand_width) // 2 + i * (2 * self.HAND_HORIZONTAL_MARGIN + self.TILE_SIZE) + self.HAND_HORIZONTAL_MARGIN
-            tile_y = y + self.HAND_VERTICAL_MARGIN
-            self.render_tile(tile, tile_x, tile_y)
-
     def render_pieces(self, pieces):
         for i, piece in enumerate(pieces):
             self.render_piece(piece, i)
@@ -118,10 +107,17 @@ class GameRenderer:
         y = self.BOARD_TOP_MARGIN + piece.row * self.TILE_SIZE + point_offsets[piece.edge_position][1]
         pygame.draw.circle(self.screen, self.PIECE_COLORS[piece_index], [x, y], self.PIECE_RADIUS)
 
+    def render_hand(self, hand):
+        total_hand_width = len(hand) * (self.TILE_SIZE + 2 * self.HAND_HORIZONTAL_MARGIN)
+        for i, tile in enumerate(hand):
+            tile_x = (self.screen_width - total_hand_width) // 2 + i * (2 * self.HAND_HORIZONTAL_MARGIN + self.TILE_SIZE) + self.HAND_HORIZONTAL_MARGIN
+            tile_y = self.board_height + self.HAND_VERTICAL_MARGIN
+            self.render_tile(tile, tile_x, tile_y)
+
     def render_hand_selection(self, hand_selection):
-        hand_y = self.board_height + hand_selection["player_index"] * self.player_hand_height
-        y = hand_y + self.HAND_VERTICAL_MARGIN - self.HAND_SELECTION_PADDING
-        total_hand_width = len(hand_selection["player"].hand) * (self.TILE_SIZE + 2 * self.HAND_HORIZONTAL_MARGIN)
+        hand_y = self.board_height
+        y = self.board_height + self.HAND_VERTICAL_MARGIN - self.HAND_SELECTION_PADDING
+        total_hand_width = len(hand_selection["hand"]) * (self.TILE_SIZE + 2 * self.HAND_HORIZONTAL_MARGIN)
         x = (self.screen_width - total_hand_width) // 2 + hand_selection["selected_tile"] * (2 * self.HAND_HORIZONTAL_MARGIN + self.TILE_SIZE) + self.HAND_HORIZONTAL_MARGIN - self.HAND_SELECTION_PADDING
         pygame.draw.rect(self.screen, self.PIECE_COLORS[hand_selection["player_index"]], [x, y, self.TILE_SIZE + 2 * self.HAND_SELECTION_PADDING, self.TILE_SIZE + 2 * self.HAND_SELECTION_PADDING], self.HAND_SELECTION_LINE_WIDTH)
 
