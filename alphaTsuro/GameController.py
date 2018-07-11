@@ -5,7 +5,7 @@ import Agents
 import copy
 
 class GameController:
-    def __init__(self):
+    def run(self):
         self.game_renderer = GameRenderer()
         self.game_state = GameState()
         self.agents = [Agents.HumanAgent(), Agents.AvoidDeathAgent()]

@@ -1,3 +1,4 @@
 from alphaTsuro.GameController import GameController
+from alphaTsuro.SimulationController import SimulationController
 
-game = GameController()
+game = SimulationController().run(100)
