@@ -27,6 +27,13 @@ class GameState:
             player.piece.update_position()
 
     def check_win_state(self):
+        all_tiles_gone = True
+        for player in self.players:
+            if len(player.hand) > 0:
+                all_tiles_gone = False
+        if all_tiles_gone:
+            return {"win_state": "tie"}
+
         not_elimated = []
         for i in range(len(self.players)):
             if self.players[i].piece.on_board():
