@@ -24,4 +24,5 @@ class SimulationController:
                 points[win_state["winner"]] += 2
 
         print("time = " + str(time.time() - start))
+        print("copies = " + str(agents[0].copies + agents[1].copies))
         print(points)
