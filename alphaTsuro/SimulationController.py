@@ -1,10 +1,10 @@
-from GameState import GameState
-import Agents
+from .GameState import GameState
+from .Agents import AvoidDeathAgent
 import copy
 import time
 
 class SimulationController:
-    def run(self, num_games, agents=[Agents.AvoidDeathAgent(), Agents.AvoidDeathAgent()]):
+    def run(self, num_games, agents=[AvoidDeathAgent(), AvoidDeathAgent()]):
         num_games
         points = [0, 0]
         start = time.time()

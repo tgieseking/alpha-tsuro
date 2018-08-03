@@ -1,7 +1,7 @@
-from Board import Board
-from Deck import Deck
-from Player import Player
-from PlayerAgent import RandomAgent, AvoidDeathAgent
+from .Board import Board
+from .Deck import Deck
+from .Player import Player
+from .Agents import RandomAgent, AvoidDeathAgent
 import copy
 
 class GameState:

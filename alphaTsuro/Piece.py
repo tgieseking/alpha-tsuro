@@ -1,4 +1,4 @@
-from Board import Board
+from .Board import Board
 
 class Piece:
     """A game piece"""
@@ -10,7 +10,7 @@ class Piece:
         if not edge_position in {"UL", "UR", "RU", "RD",
                                  "DR", "DL", "LD","LU"}:
             raise InvalidPositionException
-            
+
         self.board = board
         self.row = row
         self.col = col

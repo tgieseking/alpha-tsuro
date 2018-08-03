@@ -1,5 +1,5 @@
-from Piece import Piece
-from Board import Board
+from .Piece import Piece
+from .Board import Board
 
 class Player:
     def __init__(self, index, board, deck, piece_row, piece_col, piece_position):
