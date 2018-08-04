@@ -1,4 +1,5 @@
 import random
+import math
 
 class GameTree:
     def __init__(self, root_state):
@@ -47,3 +48,15 @@ class GameNode:
         self.children = {}
         self.total_value = [0,0]
         self.visits = 0
+
+def UCBSelector(node, possible_actions, current_player_index):
+    best_action = None
+    max_ucb = None
+    for action in possible_actions:
+        if not action in node.children:
+            return action
+        else:
+            ucb = (node.children[action].total_value[current_player_index] / node.children[action].visits) + UCB_CONST * math.sqrt(math.log(node.visits) / math.log(node.children[action].visits))
+            if not best_action or ucb > max_ucb:
+                best_action = action
+                max_ucb = ucb
