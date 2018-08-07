@@ -3,37 +3,39 @@ import math
 
 class GameRenderer:
     def __init__(self):
+        self.SCALE_FACTOR = 4
         self.BACKGROUND_COLOR = (255, 255, 255)
 
-        self.TILE_SIZE = 40
-        self.TILE_MARK_DIST = 10 # the distance from the corner to a path connection point
-        self.TILE_BORDER_WIDTH = 2
+        self.TILE_SIZE = 40 * self.SCALE_FACTOR
+        self.TILE_MARK_DIST = 10 * self.SCALE_FACTOR # the distance from the corner to a path connection point
+        self.TILE_BORDER_WIDTH = 2 * self.SCALE_FACTOR
         self.TILE_BORDER_COLOR = (0, 0, 0)
-        self.TILE_PATH_WIDTH = 2
+        self.TILE_PATH_WIDTH = 2 * self.SCALE_FACTOR
         self.TILE_PATH_COLOR = (127, 55, 0)
 
-        self.BOARD_TOP_MARGIN = 40
-        self.BOARD_BOTTOM_MARGIN = 40
-        self.BOARD_SIDE_MARGIN = 40
-        self.BOARD_LINE_WIDTH = 2
+        self.BOARD_TOP_MARGIN = 40 * self.SCALE_FACTOR
+        self.BOARD_BOTTOM_MARGIN = 40 * self.SCALE_FACTOR
+        self.BOARD_SIDE_MARGIN = 40 * self.SCALE_FACTOR
+        self.BOARD_LINE_WIDTH = 2 * self.SCALE_FACTOR
         self.BOARD_LINE_COLOR = (0, 0, 0)
 
-        self.HAND_VERTICAL_MARGIN = 10
-        self.HAND_HORIZONTAL_MARGIN = 20
+        self.HAND_VERTICAL_MARGIN = 10 * self.SCALE_FACTOR
+        self.HAND_HORIZONTAL_MARGIN = 20 * self.SCALE_FACTOR
 
-        self.HAND_SELECTION_PADDING = 5
+        self.HAND_SELECTION_PADDING = 5 * self.SCALE_FACTOR
         self.HAND_SELECTION_LINE_COLOR = (255, 135, 40)
-        self.HAND_SELECTION_LINE_WIDTH = 2
+        self.HAND_SELECTION_LINE_WIDTH = 2 * self.SCALE_FACTOR
 
-        self.PIECE_RADIUS = 5
+        self.PIECE_RADIUS = 5 * self.SCALE_FACTOR
         self.PIECE_COLORS = [(255, 0, 0), (0, 0, 255)]
 
         self.WIN_MESSAGE_COLOR = (0, 0, 0)
-        self.WIN_MESSAGE_TOP_MARGIN = 100
-        self.WIN_MESSAGE_PADDING = 5
+        self.WIN_MESSAGE_TOP_MARGIN = 100 * self.SCALE_FACTOR
+        self.WIN_MESSAGE_PADDING = 5 * self.SCALE_FACTOR
         self.WIN_MESSAGE_BACKGROUND_COLOR = (255, 255, 255)
         self.WIN_MESSAGE_BORDER_COLOR = (0, 0, 0)
-        self.WIN_MESSAGE_BORDER_WIDTH = 2
+        self.WIN_MESSAGE_BORDER_WIDTH = 2 * self.SCALE_FACTOR
+        self.WIN_MESSAGE_FONT_SIZE = 20 * self.SCALE_FACTOR
 
     def initialize_screen(self, game_state):
         self.screen_width = 2 * self.BOARD_SIDE_MARGIN + game_state.board.board_size * self.TILE_SIZE
@@ -122,7 +124,7 @@ class GameRenderer:
         pygame.draw.rect(self.screen, self.PIECE_COLORS[hand_selection["player_index"]], [x, y, self.TILE_SIZE + 2 * self.HAND_SELECTION_PADDING, self.TILE_SIZE + 2 * self.HAND_SELECTION_PADDING], self.HAND_SELECTION_LINE_WIDTH)
 
     def render_win_state(self, win_state):
-        WIN_MESSAGE_FONT = pygame.font.SysFont('Arial', 20)
+        WIN_MESSAGE_FONT = pygame.font.SysFont('Arial', self.WIN_MESSAGE_FONT_SIZE)
         if win_state["win_state"] == "win":
             message = "The winner is player " + str(win_state["winner"] + 1)
         elif win_state["win_state"] == "tie":
