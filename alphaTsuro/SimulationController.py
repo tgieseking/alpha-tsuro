@@ -1,15 +1,19 @@
 from .GameState import GameState
-from .Agents import AvoidDeathAgent
+from .Agents import AvoidDeathAgent, MCTSAgent
 import copy
 import time
 
 class SimulationController:
-    def run(self, num_games, agents=[AvoidDeathAgent(), AvoidDeathAgent()]):
+    def run(self, num_games, agents=[MCTSAgent(20, 10), MCTSAgent(1000, 10)]):
         num_games
         points = [0, 0]
         start = time.time()
 
         for i in range(num_games):
+            print("Starting game " + str(i))
+            print("Score is " + str(points))
+            agents.reverse()
+            points.reverse()
             game_state = GameState()
             win_state = {"win_state": "ongoing"}
             while win_state["win_state"] == "ongoing":
@@ -18,11 +22,10 @@ class SimulationController:
                 game_state.take_turn(tile_index, num_rotations)
                 win_state = game_state.check_win_state()
             if win_state["win_state"] == "tie":
-                points[0] += 1
-                points[1] += 1
+                points[0] += 0.5
+                points[1] += 0.5
             elif win_state["win_state"] == "win":
-                points[win_state["winner"]] += 2
+                points[win_state["winner"]] += 1
 
         print("time = " + str(time.time() - start))
-        print("copies = " + str(agents[0].copies + agents[1].copies))
         print(points)

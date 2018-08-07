@@ -1,14 +1,14 @@
 import pygame
 from .GameRenderer import GameRenderer
 from .GameState import GameState
-from .Agents import HumanAgent, AvoidDeathAgent
+from .Agents import HumanAgent, AvoidDeathAgent, MCTSAgent
 import copy
 
 class GameController:
     def run(self):
         self.game_renderer = GameRenderer()
         self.game_state = GameState()
-        self.agents = [HumanAgent(), AvoidDeathAgent()]
+        self.agents = [HumanAgent(), MCTSAgent()]
         self.set_state(InitializeState())
         self.game_loop()
 

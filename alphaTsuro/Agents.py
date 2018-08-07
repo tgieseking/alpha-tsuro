@@ -1,6 +1,7 @@
 from .Piece import Piece
 import random
 import copy
+from .MCTS import GameTree, UCBSelector
 
 class HumanAgent:
     def is_human(self):
@@ -52,6 +53,39 @@ class AvoidDeathAgent(ComputerAgent):
             return ties[0]
         else:
             return losses[0]
+
+class MCTSAgent(ComputerAgent):
+    def __init__(self, num_iterations = 100, num_randomizations = 10):
+        self.num_randomizations = num_randomizations
+        self.num_iterations = num_iterations
+
+    def select_tile(self, game_state):
+        # import pdb; pdb.set_trace()
+        total_value = {}
+        visits = {}
+        player_index = game_state.current_player_index
+        for action in game_state.possible_actions():
+            total_value[action] = 0
+            visits[action] = 0
+        for i in range(self.num_randomizations):
+            # print("Starting randomization " + str(i))
+            root_state = game_state.get_randomization(player_index)
+            game_tree = GameTree(root_state)
+            for j in range(self.num_iterations):
+                # print("starting iteration " + str(j))
+                game_tree.simulate_game(UCBSelector)
+            for action in total_value:
+                action_node = game_tree.root.children[action]
+                total_value[action] += action_node.total_value[player_index]
+                visits[action] += action_node.visits
+        best_action = None
+        best_value = None
+        for action in total_value:
+            average_value = total_value[action] / visits[action]
+            if not best_value or best_value < average_value:
+                best_value = average_value
+                best_action = action
+        return best_action
 
 class InvalidWinStateException(Exception):
     pass

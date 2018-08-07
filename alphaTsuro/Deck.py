@@ -30,8 +30,5 @@ class Deck:
     def draw(self):
         return self.tiles.pop()
 
-    def add_tile(self, tile):
-        self.tile.append(tile)
-
     def isEmpty(self):
         return len(self.tiles) == 0
