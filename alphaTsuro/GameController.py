@@ -5,10 +5,10 @@ from .Agents import HumanAgent, AvoidDeathAgent, MCTSAgent
 import copy
 
 class GameController:
-    def run(self):
+    def run(self, agents):
         self.game_renderer = GameRenderer()
         self.game_state = GameState()
-        self.agents = [HumanAgent(), MCTSAgent()]
+        self.agents = agents
         self.set_state(InitializeState())
         self.game_loop()
 

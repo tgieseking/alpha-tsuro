@@ -4,7 +4,7 @@ import copy
 import time
 
 class SimulationController:
-    def run(self, num_games, agents=[MCTSAgent(20, 10), MCTSAgent(1000, 10)]):
+    def run(self, agents, num_games):
         num_games
         points = [0, 0]
         start = time.time()
